@@ -38,21 +38,33 @@ public class RestaurantService {
     }
 
     public boolean updateRestaurantById(Long id, Restaurant restaurant) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User authenticatedUser = userService.findByUsername(userDetails.getUsername());
+
         Restaurant oldRestaurant = this.getRestaurantById(id);
-        if(oldRestaurant != null) {
-            restaurant.setId(oldRestaurant.getId());
-            restaurant.setOwner(oldRestaurant.getOwner());
-            restaurantRepository.save(restaurant);
-            return true;
+        // ensure that only the restaurant owner can update the restaurant
+        if(authenticatedUser == oldRestaurant.getOwner()){
+            if(oldRestaurant.getId() != null) {
+                restaurant.setId(oldRestaurant.getId());
+                restaurant.setOwner(oldRestaurant.getOwner());
+                restaurantRepository.save(restaurant);
+                return true;
+            }
         }
         return false;
     }
 
     public boolean deleteRestaurantById(Long id) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User authenticatedUser = userService.findByUsername(userDetails.getUsername());
+
         Restaurant restaurant = this.getRestaurantById(id);
-        if(restaurant != null) {
-            restaurantRepository.deleteById(id);
-            return true;
+
+        if(restaurant.getId() != null) {
+            if(authenticatedUser == restaurant.getOwner()) {
+                restaurantRepository.deleteById(id);
+                return true;
+            }
         }
         return false;
     }

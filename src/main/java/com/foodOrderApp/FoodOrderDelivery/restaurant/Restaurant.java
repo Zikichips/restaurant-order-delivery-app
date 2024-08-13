@@ -2,8 +2,11 @@ package com.foodOrderApp.FoodOrderDelivery.restaurant;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.foodOrderApp.FoodOrderDelivery.menuitem.MenuItem;
 import com.foodOrderApp.FoodOrderDelivery.user.User;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // help prevent infinite loop
@@ -23,6 +26,9 @@ public class Restaurant {
     @JoinColumn(name = "user_id")
 //    @JsonManagedReference
     private User owner;
+
+    @OneToMany(mappedBy = "restaurant")
+    private List<MenuItem> menuItems;
 
     public Long getId() {
         return id;
@@ -62,5 +68,13 @@ public class Restaurant {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public List<MenuItem> getMenuItems() {
+        return menuItems;
+    }
+
+    public void setMenuItems(List<MenuItem> menuItems) {
+        this.menuItems = menuItems;
     }
 }
