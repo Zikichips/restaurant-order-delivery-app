@@ -1,5 +1,6 @@
 package com.foodOrderApp.FoodOrderDelivery.auth;
 
+import com.foodOrderApp.FoodOrderDelivery.cart.CartService;
 import com.foodOrderApp.FoodOrderDelivery.user.User;
 import com.foodOrderApp.FoodOrderDelivery.user.UserRepository;
 import jakarta.validation.Valid;
@@ -34,8 +35,8 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-//    @Autowired
-//    private CartService cartService;
+    @Autowired
+    private CartService cartService;
 
 
 
@@ -52,7 +53,7 @@ public class AuthController {
         user.setRole(user.getRole());
         User newUser = userRepository.save(user);
         if(newUser.getId() != null) {
-//            cartService.createCart(user.getUsername());
+            cartService.createCart(user.getUsername());
             return new ResponseEntity<>("User created successfully", HttpStatus.OK);
         }
         return new ResponseEntity<>("User could not be created", HttpStatus.BAD_REQUEST);

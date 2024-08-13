@@ -1,9 +1,12 @@
 package com.foodOrderApp.FoodOrderDelivery.menuitem;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.foodOrderApp.FoodOrderDelivery.restaurant.Restaurant;
 import jakarta.persistence.*;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // help prevent infinite loop
 public class MenuItem {
 
     @Id
