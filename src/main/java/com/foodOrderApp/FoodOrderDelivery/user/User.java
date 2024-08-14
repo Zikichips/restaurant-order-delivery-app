@@ -1,7 +1,10 @@
 package com.foodOrderApp.FoodOrderDelivery.user;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.foodOrderApp.FoodOrderDelivery.cart.Cart;
+import com.foodOrderApp.FoodOrderDelivery.purchaseOrder.PurchaseOrder;
 import com.foodOrderApp.FoodOrderDelivery.restaurant.Restaurant;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -42,13 +45,13 @@ public class User {
 //   @JsonBackReference
     private List<Restaurant> restaurants;
 
-//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonManagedReference
-//    private Cart cart;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Cart cart;
 //
-//    @OneToMany(mappedBy = "user")
-//    @JsonManagedReference
-//    private List<PurchaseOrder> orders;
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<PurchaseOrder> orders;
 
 
 
@@ -103,19 +106,19 @@ public class User {
         this.restaurants = restaurants;
     }
 
-    //    public Cart getCart() {
-//        return cart;
-//    }
-//
-//    public void setCart(Cart cart) {
-//        this.cart = cart;
-//    }
-//
-//    public List<PurchaseOrder> getOrders() {
-//        return orders;
-//    }
-//
-//    public void setOrders(List<PurchaseOrder> orders) {
-//        this.orders = orders;
-//    }
+        public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public List<PurchaseOrder> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<PurchaseOrder> orders) {
+        this.orders = orders;
+    }
 }
