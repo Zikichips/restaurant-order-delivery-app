@@ -1,5 +1,6 @@
 package com.foodOrderApp.FoodOrderDelivery.cart;
 
+import com.foodOrderApp.FoodOrderDelivery.cartItem.CartItemResponseDTO;
 import com.foodOrderApp.FoodOrderDelivery.user.User;
 import com.foodOrderApp.FoodOrderDelivery.user.UserService;
 import org.springframework.http.HttpStatus;
@@ -22,12 +23,27 @@ public class CartController {
     }
 
     @GetMapping("/cart")
-    public ResponseEntity<Cart> getCartForUser(@AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity<CartResponseDTO> getCartForUser(@AuthenticationPrincipal UserDetails userDetails){
         if(userDetails.getUsername() != null) {
             User user = userService.findByUsername(userDetails.getUsername());
             Cart cart = cartService.findCartByUser(user);
             if(cart != null) {
-                return new ResponseEntity<>(cart, HttpStatus.OK);
+                CartResponseDTO cartResponseDTO = new CartResponseDTO();
+                cartResponseDTO.setId(cart.getId());
+                cartResponseDTO.setTotalPrice(cart.getTotal_price());
+                cartResponseDTO.setCartItems(cart.getCartItems().stream()
+                        .map(cartItem -> {
+                            CartItemResponseDTO cartItemResponseDTO = new CartItemResponseDTO();
+                            cartItemResponseDTO.setId(cartItem.getId());
+                            cartItemResponseDTO.setQuantity(cartItem.getQuantity());
+                            cartItemResponseDTO.setCart_id(cartItem.getCart().getId());
+                            cartItemResponseDTO.setMenuItemName(cartItem.getMenuItem().getName());
+                            cartItemResponseDTO.setPrice(cartItem.getMenuItem().getPrice());
+
+                            return cartItemResponseDTO;
+                        }).toList());
+
+                return new ResponseEntity<>(cartResponseDTO, HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

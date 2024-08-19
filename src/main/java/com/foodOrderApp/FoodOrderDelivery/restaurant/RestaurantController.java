@@ -18,15 +18,33 @@ public class RestaurantController {
     }
 
     @GetMapping("/restaurants")
-    public ResponseEntity<List<Restaurant>> getAllRestaurants() {
-        return new ResponseEntity<List<Restaurant>>(restaurantService.getAllRestaurants(), HttpStatus.OK);
+    public ResponseEntity<List<RestaurantResponseDTO>> getAllRestaurants() {
+        List<Restaurant> restaurants = restaurantService.getAllRestaurants();
+        List<RestaurantResponseDTO> listOfRestaurantsDTO = restaurants.stream()
+                .map(restaurant -> {
+                    RestaurantResponseDTO restaurantResponseDTO = new RestaurantResponseDTO();
+                    restaurantResponseDTO.setId(restaurant.getId());
+                    restaurantResponseDTO.setName(restaurant.getName());
+                    restaurantResponseDTO.setAddress(restaurant.getAddress());
+                    restaurantResponseDTO.setPhoneNumber(restaurant.getPhoneNumber());
+                    restaurantResponseDTO.setOwner_id(restaurant.getOwner().getId());
+                    return  restaurantResponseDTO;
+                }).toList();
+
+        return new ResponseEntity<List<RestaurantResponseDTO>>(listOfRestaurantsDTO, HttpStatus.OK);
     }
 
     @GetMapping("/restaurants/{id}")
-    public ResponseEntity<Restaurant> getRestaurantById(@PathVariable Long id) {
+    public ResponseEntity<RestaurantResponseDTO> getRestaurantById(@PathVariable Long id) {
         Restaurant restaurant = restaurantService.getRestaurantById(id);
         if(restaurant.getId() != null) {
-            return new ResponseEntity<>(restaurant, HttpStatus.OK);
+            RestaurantResponseDTO restaurantResponseDTO = new RestaurantResponseDTO();
+            restaurantResponseDTO.setId(restaurant.getId());
+            restaurantResponseDTO.setName(restaurant.getName());
+            restaurantResponseDTO.setAddress(restaurant.getAddress());
+            restaurantResponseDTO.setPhoneNumber(restaurant.getPhoneNumber());
+            restaurantResponseDTO.setOwner_id(restaurant.getOwner().getId());
+            return new ResponseEntity<>(restaurantResponseDTO, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

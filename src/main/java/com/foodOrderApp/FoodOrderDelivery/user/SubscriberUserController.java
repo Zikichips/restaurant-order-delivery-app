@@ -17,10 +17,16 @@ public class SubscriberUserController {
     }
 
     @GetMapping("/myprofile")
-    public ResponseEntity<User> getUserById(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<UserResponseDTO> getUserById(@AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findByUsername(userDetails.getUsername());
         if(user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            UserResponseDTO userResponseDTO = new UserResponseDTO();
+            userResponseDTO.setId(user.getId());
+            userResponseDTO.setUsername(user.getUsername());
+            userResponseDTO.setEmail(user.getEmail());
+            userResponseDTO.setRole(user.getRole().toString());
+
+            return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
         }
         return new ResponseEntity<>( HttpStatus.NOT_FOUND);
     }

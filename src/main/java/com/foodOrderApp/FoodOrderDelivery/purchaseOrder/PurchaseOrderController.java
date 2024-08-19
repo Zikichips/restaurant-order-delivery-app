@@ -20,16 +20,33 @@ public class PurchaseOrderController {
     }
 
     @GetMapping("/orders")
-    public ResponseEntity<List<PurchaseOrder>> getAllOrders() {
+    public ResponseEntity<List<PurchaseOrderResponseDTO>> getAllOrders() {
             List<PurchaseOrder> purchaseOrders = purchaseOrderService.getAllUserOrders();
-            return new ResponseEntity<>(purchaseOrders, HttpStatus.OK);
+            List<PurchaseOrderResponseDTO> orderResponseDTO = purchaseOrders.stream()
+                .map(purchaseOrder -> {
+                    PurchaseOrderResponseDTO responseDTO = new PurchaseOrderResponseDTO();
+                    responseDTO.setId(purchaseOrder.getId());
+                    responseDTO.setOrderDate(purchaseOrder.getOrderDate());
+                    responseDTO.setPaymentStatus(purchaseOrder.getPaymentStatus().toString());
+                    responseDTO.setShippingAddress(purchaseOrder.getShippingAddress());
+                    responseDTO.setTotalAmount(purchaseOrder.getTotalAmount());
+
+                    return responseDTO;
+                }).toList();
+            return new ResponseEntity<>(orderResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping("/orders/{id}")
-    public ResponseEntity<PurchaseOrder> getOrderById(@PathVariable Long id) {
-        PurchaseOrder order = purchaseOrderService.getOrderById(id);
-        if(order.getId() != null) {
-            return new ResponseEntity<>(order, HttpStatus.OK);
+    public ResponseEntity<PurchaseOrderResponseDTO> getOrderById(@PathVariable Long id) {
+        PurchaseOrder purchaseOrder = purchaseOrderService.getOrderById(id);
+        if(purchaseOrder.getId() != null) {
+            PurchaseOrderResponseDTO responseDTO = new PurchaseOrderResponseDTO();
+            responseDTO.setId(purchaseOrder.getId());
+            responseDTO.setOrderDate(purchaseOrder.getOrderDate());
+            responseDTO.setPaymentStatus(purchaseOrder.getPaymentStatus().toString());
+            responseDTO.setShippingAddress(purchaseOrder.getShippingAddress());
+            responseDTO.setTotalAmount(purchaseOrder.getTotalAmount());
+            return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

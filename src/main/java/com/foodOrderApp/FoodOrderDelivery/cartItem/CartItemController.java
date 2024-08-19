@@ -20,10 +20,17 @@ public class CartItemController {
     }
 
     @GetMapping("/cartitem/{id}")
-    public ResponseEntity<CartItem> getCartItemById(@PathVariable Long id) {
+    public ResponseEntity<CartItemResponseDTO> getCartItemById(@PathVariable Long id) {
         CartItem itemExists = cartItemService.findById(id);
         if(itemExists != null) {
-            return new ResponseEntity<>(itemExists, HttpStatus.OK);
+            CartItemResponseDTO cartItemResponseDTO = new CartItemResponseDTO();
+            cartItemResponseDTO.setId(itemExists.getId());
+            cartItemResponseDTO.setQuantity(itemExists.getQuantity());
+            cartItemResponseDTO.setCart_id(itemExists.getCart().getId());
+            cartItemResponseDTO.setMenuItemName(itemExists.getMenuItem().getName());
+            cartItemResponseDTO.setPrice(itemExists.getMenuItem().getPrice());
+
+            return new ResponseEntity<>(cartItemResponseDTO, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

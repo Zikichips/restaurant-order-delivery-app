@@ -96,6 +96,7 @@ public class PurchaseOrderService {
         new ResponseEntity<>("Order could not be created", HttpStatus.BAD_REQUEST);
     }
 
+
     public List<PurchaseOrder> getAllUserOrders() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.findByUsername(userDetails.getUsername());

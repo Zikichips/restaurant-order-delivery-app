@@ -18,21 +18,52 @@ public class MenuItemController {
 
     // Get all Menu Items
     @GetMapping("/menuitems")
-    public ResponseEntity<List<MenuItem>> getAllMenuItems() {
-        return new ResponseEntity<>(menuItemService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<MenuItemResponseDTO>> getAllMenuItems() {
+        List<MenuItem> menuItems = menuItemService.findAll();
+        List<MenuItemResponseDTO> allMenuItemsResponseDTO = menuItems.stream()
+                .map(menuItem -> {
+                    MenuItemResponseDTO menuItemResponseDTO = new MenuItemResponseDTO();
+                    menuItemResponseDTO.setId(menuItem.getId());
+                    menuItemResponseDTO.setName(menuItem.getName());
+                    menuItemResponseDTO.setDescription(menuItem.getDescription());
+                    menuItemResponseDTO.setPrice(menuItem.getPrice());
+                    menuItemResponseDTO.setRestaurant_id(menuItem.getRestaurant().getId());
+
+                    return menuItemResponseDTO;
+                }).toList();
+        return new ResponseEntity<>(allMenuItemsResponseDTO, HttpStatus.OK);
     }
 
     // Get all Menu Items associated with a Single Restaurant
     @GetMapping("/restaurant/{restaurant_id}/menuitems")
-    public ResponseEntity<List<MenuItem>> getAllMenuItemsForSingleRestaurant(@PathVariable Long restaurant_id) {
-        return new ResponseEntity<>(menuItemService.findAllByRestaurantId(restaurant_id), HttpStatus.OK);
+    public ResponseEntity<List<MenuItemResponseDTO>> getAllMenuItemsForSingleRestaurant(@PathVariable Long restaurant_id) {
+        List<MenuItem> menuItems = menuItemService.findAllByRestaurantId(restaurant_id);
+        List<MenuItemResponseDTO> allMenuItemsResponseDTO = menuItems.stream()
+                .map(menuItem -> {
+                    MenuItemResponseDTO menuItemResponseDTO = new MenuItemResponseDTO();
+                    menuItemResponseDTO.setId(menuItem.getId());
+                    menuItemResponseDTO.setName(menuItem.getName());
+                    menuItemResponseDTO.setDescription(menuItem.getDescription());
+                    menuItemResponseDTO.setPrice(menuItem.getPrice());
+                    menuItemResponseDTO.setRestaurant_id(menuItem.getRestaurant().getId());
+
+                    return menuItemResponseDTO;
+                }).toList();
+        return new ResponseEntity<>(allMenuItemsResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping("/menuitems/{id}")
-    public ResponseEntity<MenuItem> getMenuItemById(@PathVariable Long id) {
+    public ResponseEntity<MenuItemResponseDTO> getMenuItemById(@PathVariable Long id) {
         MenuItem itemExists = menuItemService.findById(id);
         if(itemExists != null) {
-            return new ResponseEntity<>(itemExists, HttpStatus.OK);
+            MenuItemResponseDTO menuItemResponseDTO = new MenuItemResponseDTO();
+            menuItemResponseDTO.setId(itemExists.getId());
+            menuItemResponseDTO.setName(itemExists.getName());
+            menuItemResponseDTO.setDescription(itemExists.getDescription());
+            menuItemResponseDTO.setPrice(itemExists.getPrice());
+            menuItemResponseDTO.setRestaurant_id(itemExists.getRestaurant().getId());
+
+            return new ResponseEntity<>(menuItemResponseDTO, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

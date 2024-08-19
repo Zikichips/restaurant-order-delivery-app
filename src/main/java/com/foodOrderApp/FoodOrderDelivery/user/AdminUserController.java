@@ -18,17 +18,35 @@ public class AdminUserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        List<User> allUsers = userService.getAllUsers();
+        List<UserResponseDTO> allUsersResponseDTO = allUsers.stream()
+                .map(user -> {
+                    UserResponseDTO userResponseDTO = new UserResponseDTO();
+                    userResponseDTO.setId(user.getId());
+                    userResponseDTO.setUsername(user.getUsername());
+                    userResponseDTO.setEmail(user.getEmail());
+                    userResponseDTO.setRole(user.getRole().toString());
+
+                    return userResponseDTO;
+                }).toList();
+
+        return new ResponseEntity<>(allUsersResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
         User user = userService.findUserById(id);
         if(user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            UserResponseDTO userResponseDTO = new UserResponseDTO();
+            userResponseDTO.setId(user.getId());
+            userResponseDTO.setUsername(user.getUsername());
+            userResponseDTO.setEmail(user.getEmail());
+            userResponseDTO.setRole(user.getRole().toString());
+
+            return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
         }
-        return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 

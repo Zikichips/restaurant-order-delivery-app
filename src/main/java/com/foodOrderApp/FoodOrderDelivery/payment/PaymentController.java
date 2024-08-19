@@ -19,13 +19,13 @@ public class PaymentController {
     private final PaymentService paymentService;
     private PurchaseOrderService purchaseOrderService;
 
-    @Value("${stripe.api.key}")
-    private String stripeApiKey;
-
     public PaymentController(PaymentService paymentService, PurchaseOrderService purchaseOrderService) {
         this.paymentService = paymentService;
         this.purchaseOrderService = purchaseOrderService;
     }
+
+    @Value("${stripe.api.key}")
+    private String stripeApiKey ;
 
     // This endpoint should be enough if I'm working with a frontend like React.
     // I just need to pass the client secret, and the frontend will use Stripe.js to complete the process
