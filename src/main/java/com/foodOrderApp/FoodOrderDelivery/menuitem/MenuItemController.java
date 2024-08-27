@@ -98,14 +98,4 @@ public class MenuItemController {
         return new ResponseEntity<>("Menu Item could not be deleted", HttpStatus.BAD_REQUEST);
     }
 
-
-//    @DeleteMapping("/cartitem/{id}")
-//    public ResponseEntity<String> removeItemFromCart(@PathVariable Long id) {
-//        boolean deleted = cartItemService.deleteCartItemById(id);
-//        if(deleted) {
-//            return new ResponseEntity<>("Item deleted from cart", HttpStatus.OK);
-//        }
-//        return new ResponseEntity<>("Could not delete item from cart" , HttpStatus.BAD_REQUEST);
-//
-//    }
 }

@@ -10,13 +10,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/subscriber")
 public class CartItemController {
     private CartItemService cartItemService;
-    private UserService userService;
-    private CartService cartService;
 
     public CartItemController(CartItemService cartItemService, UserService userService, CartService cartService) {
         this.cartItemService = cartItemService;
-        this.userService = userService;
-        this.cartService = cartService;
     }
 
     @GetMapping("/cartitem/{id}")

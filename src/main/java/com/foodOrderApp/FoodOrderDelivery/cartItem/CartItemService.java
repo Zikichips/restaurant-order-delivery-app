@@ -37,14 +37,11 @@ public class CartItemService {
 
             User user = userService.findByUsername(userDetails.getUsername());
             Cart cart = cartService.findCartByUser(user);
-            System.out.println("Got here 1");
 
             cartItem.setQuantity(quantity);
             cartItem.setMenuItem(menuItem);
             cartItem.setCart(cart);
-            System.out.println("Got here 2");
             cartItemRepository.save(cartItem);
-            System.out.println("Got here 3");
             updateCartTotalPrice();
             return true;
         }
