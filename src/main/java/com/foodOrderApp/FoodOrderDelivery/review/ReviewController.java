@@ -17,7 +17,6 @@ public class ReviewController {
 
     @PostMapping("/reviews")
     public ResponseEntity<String> postReview(@RequestBody ReviewDTO review) {
-        System.out.println("First");
         boolean created = reviewService.postReview(review);
         if(created) {
             return new ResponseEntity<>("Review created  successfully", HttpStatus.CREATED);

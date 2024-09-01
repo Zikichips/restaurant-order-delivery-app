@@ -29,8 +29,8 @@ public class ReviewService {
 
 
         // check if the authenticated user actually ordered from the restaurant
-        if(review.getReviewEntityType().equals("RESTAURANT")) {
-            System.out.println("It's a restaurant");
+        if(review.getReviewEntityType().equals("RESTAURANT") &&
+                !reviewRepository.existsByUserAndReviewEntityTypeAndReviewEntityId(authenticatedUser, review.getReviewEntityType(), review.getReviewEntityId())) {
             PurchaseOrder purchaseOrder = authenticatedUser.getOrders().stream()
                     .filter(order -> order.getRestaurant().getId() == review.getReviewEntityId())
                     .findFirst().orElse(null);
@@ -48,7 +48,7 @@ public class ReviewService {
         }
 
         // check if the authenticated user actually ordered the particular menu item
-        else if(review.getReviewEntityType().equals("MENUITEM")) {
+        else if(review.getReviewEntityType().equals("MENUITEM") && !reviewRepository.existsByUserAndReviewEntityTypeAndReviewEntityId(authenticatedUser, review.getReviewEntityType(), review.getReviewEntityId())) {
             Optional<OrderItem> purchaseOrderItem = authenticatedUser.getOrders().stream()
                     .flatMap(order -> order.getOrderItems().stream())
                     .filter(orderItem -> orderItem.getMenuItem().getId() == review.getReviewEntityId())

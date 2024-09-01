@@ -6,6 +6,9 @@ import com.foodOrderApp.FoodOrderDelivery.user.User;
 import jakarta.persistence.*;
 
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "reviewed_entity_id", "reviewed_entity_type"})
+})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // help prevent infinite loop
 public class Review {
 
