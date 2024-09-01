@@ -108,7 +108,7 @@ public class PurchaseOrderService {
         User user = userService.findByUsername(userDetails.getUsername());
 
         PurchaseOrder purchaseOrder = user.getOrders().stream()
-                .filter(order -> order.getId() == id)
+                .filter(order -> order.getId().equals(id))
                 .findFirst().orElse(null);
         if(purchaseOrder.getId() != null) {
             return purchaseOrder;
